@@ -17,30 +17,24 @@ const tempUploadDirectory = "/var/task/tmp";
 // Create directory if it doesn't exist
 
 // app.use(express.static(path.join(__dirname,"/public/Images")));
-app.use(express.static("public"));
+// app.use(express.static("public"));
 app.use(express.json());
 app.use(
   cors({
-    // origin: "https://tapop-assaign-ment-frontend.vercel.app",
-    origin: "http://localhost:3000",
-    // origin: "*",
+    origin: "*",
     methods: ["GET", "POST", "PUT", "DELETE"], // Allowed HTTP methods
-    allowedHeaders: ["Content-Type", "Authorization"], // Allowed request headers
-    // credentials: true,
-    // preflightContinue: true,
-    // optionsSuccessStatus: 204,
   })
 );
 app.options("*", cors());
 
 // app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(
-  fileUpload({
-    useTempFiles: true,
-    tempFileDir: tempUploadDirectory,
-  })
-);
+// app.use(
+//   fileUpload({
+//     useTempFiles: true,
+//     tempFileDir: tempUploadDirectory,
+//   })
+// );
 
 // app.get("/" , (req , res)=>{
 //     return res.send("ok");
