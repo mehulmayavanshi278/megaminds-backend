@@ -21,7 +21,7 @@ class userController {
       });
       if (checkUser) {
         console.log();
-        return res.status(404).send("Already registered with this credentials");
+        return res.status(400).send({message:"Already registered with this credentials"});
       }
       let user = await userServices.create(body);
       await cartServices.create({ customerId: user });
@@ -36,12 +36,12 @@ class userController {
       const { email, password } = req.body;
       const checkUser = await userServices.findOne({ email });
       if (!checkUser) {
-        return res.status(404).send("user not registered with this Email!");
+        return res.status(400).send({message:"user not registered with this Email!"});
       }
       const checkPw = await bcrypt.compare(password, checkUser.password);
       console.log("checkpw", checkPw);
       if (!checkPw) {
-        return res.status(404).send("Invalid Credentials");
+        return res.status(400).send({message:"Invalid Credentials"});
       }
       const token = await checkUser.generateAuthToken();
       return res.status(200).send({ token });

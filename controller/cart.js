@@ -96,7 +96,7 @@ class cartController {
       });
 
       if (!cart) {
-        return res.status(404).send({ message: "Cart not found" });
+        return res.status(400).send({ message: "Cart not found" });
       }
       console.log(cart);
       const cartItems = cart.items.map((item) => ({
@@ -146,7 +146,7 @@ class cartController {
       );
 
       if (!cart) {
-        return res.status(404).send({ message: "Cart not found" });
+        return res.status(400).send({ message: "Cart not found" });
       }
 
       return res
@@ -167,7 +167,7 @@ class cartController {
     try {
       let cart = await Cart.findOne({ customerId });
       if (!cart) {
-        return res.status(404).send({ message: "Cart not found" });
+        return res.status(400).send({ message: "Cart not found" });
       }
 
       cart.items.pull({ _id: new mongoose.Types.ObjectId(cartId) });
