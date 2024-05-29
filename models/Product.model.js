@@ -1,0 +1,76 @@
+const mongoose =   require("mongoose");
+
+const productSchema = mongoose.Schema({
+    name:{
+        type:String
+    },
+    category:[],
+    price:{
+        type:Number
+    },
+    description:{
+        type:String
+    },
+    features:[],
+    manufacturer:{
+        name:{
+            type:String
+        },
+        location:{
+            type:String
+        }
+    },
+    dosage:{
+        amount:{
+            type:Number
+        },
+        unit:{
+            type:String
+        }  
+    },
+    packaging:{
+        from:{
+            type:String
+        },
+        quantity:{
+            type:Number
+        }
+    },
+    images:[],
+    ratings:{
+        avarage:{
+            type:Number
+        },
+        total:{
+            type:Number
+        }
+    },
+    tags:[],
+    additionalInformation:{
+        weight:{
+            type:String
+        },
+        dimention:{
+            type:String
+        }
+    },
+    vendorInfo:{
+        vendorName:{
+            type:String
+        },
+        vendorContact:{
+            type:Number
+        }
+    },
+    inventory:{
+        stock:{
+            type:Number
+        },
+        status:{
+            type:String,
+            enum:["In stock" , "Out Of Stock"]
+        }
+    }
+})
+
+module.exports.Product = mongoose.model('Product', productSchema);
