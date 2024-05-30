@@ -117,6 +117,7 @@ class cartController {
   create = async (req, res) => {
     const customerId = req.user._id;
     const { productId } = req.body;
+    console.log(productId)
     try {
       const checkCart = await cartServices.findOne({ customerId });
       const itemExists = checkCart.items.some(

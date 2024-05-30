@@ -4,6 +4,10 @@ const Auth = async (req, res, next) => {
   try {
     console.log(req.headers);
     console.log(req.headers.authorization);
+    if(!req?.headers?.authorization){
+      console.log("enter")
+      return res.status(400).send({error:true , message:"Login First"});
+    }
     const decode = jwt.verify(
       req.headers.authorization,
       process.env.JSONTOKEN_SECRET_KEY

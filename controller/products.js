@@ -2,6 +2,18 @@ const { redis } = require("..");
 const { productService } = require("../Services/services");
 
 class productController {
+
+
+  getSingleProduct = async(req , res)=>{
+    try{
+     const {id} = req.params;
+     console.log(id);
+     const data = await productService.findById(id);
+     return res.send(data);
+    }catch(err){
+      console.log(err);
+    }
+  }
   getProducts = async (req, res) => {
     let filter = {};
     let data;
@@ -29,6 +41,23 @@ class productController {
       console.log(err);
     }
   };
+
+
+  getRandomProducts = async(req , res)=>{
+    try{
+       let products = await productService.find();
+ 
+       const max = Math.max(products?.length , products?.length-10);
+       const min=max-10;
+       console.log("max is" , max)
+       console.log("min is" , min)
+      console.log(Math.floor(Math.random() * (max - min + 1)) + min)
+      const data = products?.slice(min,max);
+      return res.status(200).send(data);
+    }catch(err){
+      console.log(err);
+    }
+  }
 
   create = async (req, res) => {};
   update = async (req, res) => {};
