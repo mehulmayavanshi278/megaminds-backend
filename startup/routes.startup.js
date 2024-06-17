@@ -1,4 +1,8 @@
 const { cartRouter } = require("../routes/cart.routes");
+const { categoryRouter } = require("../routes/category.routes");
+const { chatRouter } = require("../routes/chat.routes");
+const { messageRouter } = require("../routes/message.routes");
+const { notificationRouter } = require("../routes/notification.routes");
 const { orderRouter } = require("../routes/order.routes");
 const { productRouter } = require("../routes/product.routes");
 
@@ -11,6 +15,10 @@ module.exports = (app) => {
   app.use("/product", productRouter);
   app.use("/cart", cartRouter);
   app.use("/order", orderRouter);
+  app.use("/category", categoryRouter);
+  app.use("/chat", chatRouter);
+  app.use("/message", messageRouter);
+  app.use("/notification", notificationRouter);
 
   app.use(ErrorHandler);
 

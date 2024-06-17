@@ -18,6 +18,9 @@ class BasicService {
   findByIdAndUpdate = async (id, Object, projection) => {
     return this.model.findByIdAndUpdate(id, Object, projection);
   };
+  updateMany = async(selector , object)=>{
+    return this.model.updateMany(object);
+  }
   findByIdAndDelete = (id) => {
     return this.model.findByIdAndDelete(id);
   };

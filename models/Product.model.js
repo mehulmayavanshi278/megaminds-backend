@@ -8,6 +8,9 @@ const productSchema = mongoose.Schema({
     price:{
         type:Number
     },
+    dummyPrice:{
+        type:Number
+    },
     description:{
         type:String
     },
@@ -36,6 +39,9 @@ const productSchema = mongoose.Schema({
             type:Number
         }
     },
+    sold:{
+      type:Number,
+    },
     images:[],
     ratings:{
         avarage:{
@@ -50,7 +56,7 @@ const productSchema = mongoose.Schema({
         weight:{
             type:String
         },
-        dimention:{
+        dimension:{
             type:String
         }
     },
@@ -68,9 +74,12 @@ const productSchema = mongoose.Schema({
         },
         status:{
             type:String,
-            enum:["In stock" , "Out Of Stock"]
         }
-    }
+    },
+createdAt: {
+    type: Date,
+    default: Date.now
+}
 })
 
 module.exports.Product = mongoose.model('Product', productSchema);

@@ -8,6 +8,13 @@ const userSchema = mongoose.Schema({
   lastName: {
     type: String,
   },
+  profileImg:{
+   type:String
+  },
+  role:{
+    type:String,
+    default:"user"
+  },
   email: {
     type: String,
   },
@@ -120,5 +127,5 @@ userSchema.methods.generateAuthToken = async function () {
   return token;
 };
 
-const Users = mongoose.model("Users", userSchema);
-module.exports = Users;
+const User = mongoose.model("User", userSchema);
+module.exports = User;
