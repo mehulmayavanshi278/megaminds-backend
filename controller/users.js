@@ -72,7 +72,9 @@ class userController {
       console.log(err);
     }
   };
-  loginWithGoogle = async (req, res) => {};
+  loginWithGoogle = async (req, res) => {
+    
+  };
   delete = async (req, res) => {};
 }
 

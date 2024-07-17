@@ -159,7 +159,7 @@ io.on('connection', (socket) => {
         console.log(`User ${userId} from register disconnected`);
         break;
       }
-    }
+    } 
   });
 });
 module.exports.redis = redis;
