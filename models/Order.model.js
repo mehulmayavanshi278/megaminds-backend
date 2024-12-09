@@ -26,7 +26,7 @@ const Orderschema = mongoose.Schema({
     },
     paymentStatus:{
         type: String
-    },
+    },  
     orderDate:{
         type: Date,
         default: Date.now // Removed function invocation

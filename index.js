@@ -12,7 +12,7 @@ const app = express();
 const server = createServer(app);
 const io = new Server(server,{
   cors:{
-    origin:"http://localhost:3000",
+    origin:"https://megaminds-admin-panel.vercel.app",
     methods:['get' , 'post'],
     credentials:true
   }
@@ -55,15 +55,15 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 require("./startup/index.startup")(app , server);
-const Redis = require("ioredis");
+// const Redis = require("ioredis");
 const { Chat } = require('./models/Chat.model');
 const { chatService, notificationService, userServices } = require('./Services/services');
 const { Message } = require('./models/Message.model');
-const redis = new Redis({
-  password: "n0RixKwGVyYjGnhs2D2Lr730w0bKqv4c",
-  host: "redis-16246.c91.us-east-1-3.ec2.redns.redis-cloud.com",
-  port: 16246,
-});
+// const redis = new Redis({
+//   password: "n0RixKwGVyYjGnhs2D2Lr730w0bKqv4c",
+//   host: "redis-16246.c91.us-east-1-3.ec2.redns.redis-cloud.com",
+//   port: 16246,
+// });
 
 
 const connectedUsers = new Map();
@@ -159,8 +159,8 @@ io.on('connection', (socket) => {
         console.log(`User ${userId} from register disconnected`);
         break;
       }
-    } 
+    }   
   });
 });
-module.exports.redis = redis;
+// module.exports.redis = redis;
 module.exports.io=io;

@@ -12,7 +12,7 @@ class userController {
   }
   getUsers = async (req, res) => {
     const id = req.params.id || req.user._id;
-    console.log(id);
+    console.log(id);  
     try {
       const data = await userServices.findById(id);
       return res.status(200).send(data);

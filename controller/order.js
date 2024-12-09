@@ -2,6 +2,7 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const YOUR_DOMAIN = "http://localhost:3000";
 const { orderServices, productService } = require("../Services/services");
 const { Order } = require("../models/Order.model");
+const { Product } = require("../models/Product.model");
 
 class orderController {
   getAllOrders = async (req, res) => {
@@ -72,7 +73,7 @@ class orderController {
   create = async (req, res) => {
     console.log("called");
     const body = req.body.cartItems;
-    const totalPrice = req.body.totalPrice;
+    const totalPrice = req.body.totalPrice.toFixed();
     console.log(totalPrice);
     const line_items = body.map((elm) => {
       return {
@@ -104,10 +105,14 @@ class orderController {
       })),
       totalPrice,
       totalQuantity,
-      status: "Pending",
-      paymentStatus: "Pending",
+      status: "confirm",
+      paymentStatus: "paid",
     };
     let newOrder = await orderServices.create(newOrderData);
+
+    for(const item of req.body.cartItems){
+      await productService.findByIdAndUpdate(item._id , {$inc:{sold:item.quantity}} , {new:true});
+    }
 
     const session = await stripe.checkout.sessions.create({
       line_items,
@@ -150,8 +155,9 @@ class orderController {
       const session = event.data.object;
 
       // Update the order status to Confirmed and payment status to Paid
+      console.log()
       await Order.findByIdAndUpdate(session.metadata.orderId, {
-        status: "Confirmed",
+        status: "confirm",
         paymentStatus: "Paid",
       });
     } else if (event.type === "payment_intent.payment_failed") {
@@ -196,7 +202,7 @@ class orderController {
         {
           $group: {
             _id: "$customerId",
-            orderCount: { $sum: 1 },
+            orderCount: { $sum: "$totalQuantity" },
             totalPrice: { $sum: "$totalPrice" },
           },
         },
@@ -283,12 +289,12 @@ class orderController {
       // Calculate the start and end dates of the given year
       const startOfYear = new Date(`${year}-01-01T00:00:00.000Z`);
       const endOfYear = new Date(`${year}-12-31T23:59:59.999Z`);
-      // console.log(startOfYear);
-      // console.log(endOfYear);
+      console.log(startOfYear);
+      console.log(endOfYear);
 
-      let data = await Order.aggregate([
+      let data = await Order.aggregate([  
         {
-          $match: {
+          $match: { 
             orderDate: {
               $gte: startOfYear,
               $lte: endOfYear,
@@ -325,7 +331,7 @@ class orderController {
 
   orderChat = async (req, res) => {
     try {
-      // console.log("entered");
+      console.log("entered");
       let data = await this.getOrderCountByMonth(2024);
       const months = [
         "JAN",
@@ -346,7 +352,7 @@ class orderController {
         elm.monthName = months[elm.month-1]
       }
       
-      // console.log(data);
+      console.log(data);
       res.status(200).send(data);
     } catch (err) {
       console.log(err);
