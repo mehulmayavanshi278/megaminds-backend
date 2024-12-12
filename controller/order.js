@@ -1,5 +1,5 @@
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
-const YOUR_DOMAIN = "http://localhost:3000";
+const YOUR_DOMAIN = process.env.YOUR_DOMAIN;
 const { orderServices, productService } = require("../Services/services");
 const { Order } = require("../models/Order.model");
 const { Product } = require("../models/Product.model");
