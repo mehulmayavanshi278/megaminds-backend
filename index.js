@@ -78,7 +78,10 @@ app.post('/webhook' , async(req, res)=>{
     console.log("post webhook triggered");
     const body = req.body;
     console.log("body:" , body);
-    console.log("body:" , body.entry[0].changes);
+    console.log("messages arr:" , body.entry[0].changes[0].value.messages);
+    console.log("from:" , body.entry[0].changes[0].value.messages[0].from);
+    console.log("msg text:" , body.entry[0].changes[0].value.messages[0].text);
+    console.log("msg body:" , body.entry[0].changes[0].value.messages[0].text.body);
     res.status(200).send("ok");
   }catch(err){
     console.log(err);
