@@ -104,7 +104,7 @@ app.post('/webhook', async(req, res) => {
       url: `https://graph.facebook.com/v22.0/${from_number_id}/messages`,
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' // Add your actual token here
+        'Authorization': 'Bearer EAAPhjBDnUQwBOwpyxVZCxOcKvLOOAyItHnaVmrtgiVKybAXXGT7Ajf3Vjzxhk7mmQ8fJN2C5qhbr5Ww0ZCVMCBqHQuS19z2cZCNGVLS0yFZC0PfrlZCMFDEXmoqZCM4oq3CWUliK0gYFmbi6jguJt5UXnNFxTEritiIgyaNbuod4GzL1wx5IaHEM29IukcIZCeiY0EZCqbdYYuMUKRSpxaKCxz15F37ARDMrin8ZD' // Add your actual token here
       },
       data: {
         messaging_product: 'whatsapp',
@@ -113,7 +113,7 @@ app.post('/webhook', async(req, res) => {
         type: 'text',
         text: {
           preview_url: true,
-          body: "Hello , How Are You!"
+          body: "Hello, How Are You!"
         }
       }
     });
@@ -187,7 +187,7 @@ io.on('connection', (socket) => {
 });
 
 
-EAAPhjBDnUQwBOwpyxVZCxOcKvLOOAyItHnaVmrtgiVKybAXXGT7Ajf3Vjzxhk7mmQ8fJN2C5qhbr5Ww0ZCVMCBqHQuS19z2cZCNGVLS0yFZC0PfrlZCMFDEXmoqZCM4oq3CWUliK0gYFmbi6jguJt5UXnNFxTEritiIgyaNbuod4GzL1wx5IaHEM29IukcIZCeiY0EZCqbdYYuMUKRSpxaKCxz15F37ARDMrin8ZD
+
 
   socket.on('newMessage', async(data)=>{
      try{
