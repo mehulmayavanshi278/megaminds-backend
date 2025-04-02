@@ -28,15 +28,33 @@ const tempUploadDirectory = "/var/task/tmp";
 
 // app.use(express.static(path.join(__dirname,"/public/Images")));
 
+// EAAPhjBDnUQwBOwpyxVZCxOcKvLOOAyItHnaVmrtgiVKybAXXGT7Ajf3Vjzxhk7mmQ8fJN2C5qhbr5Ww0ZCVMCBqHQuS19z2cZCNGVLS0yFZC0PfrlZCMFDEXmoqZCM4oq3CWUliK0gYFmbi6jguJt5UXnNFxTEritiIgyaNbuod4GzL1wx5IaHEM29IukcIZCeiY0EZCqbdYYuMUKRSpxaKCxz15F37ARDMrin8ZD
+
 app.get('/webhook' , async(req,res)=>{
-  console.log("webookk triggered");
+  try{
+    console.log("webookk triggered");
     let mode = req.query['hub.mode'];
     let chalenge = req.query['hub.challenge'];
     let token = req.query["hu.verify_token"];
 
     const mytoken = 'applemango';
     res.status(200).send(chalenge);
+  }catch(err){
+    console.log(err);
+  }
+
 })
+
+app.post('/webhook' , async(req, res)=>{
+  try{
+    const body = req.body;
+    console.log("body:" , body);
+    res.status(200).send("ok");
+  }catch(err){
+    console.log(err);
+  }
+})
+
 app.use(express.static("public"));
 app.use(express.json());
 app.use(
