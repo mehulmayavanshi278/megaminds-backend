@@ -88,23 +88,40 @@ app.post('/webhook', async(req, res) => {
       return res.status(200).send("ok"); // WhatsApp expects 200 OK even for invalid payloads
     }
     
+    // Check if messages array exists and is not empty
+    if (!body.entry[0].changes[0].value.messages || 
+        body.entry[0].changes[0].value.messages.length === 0) {
+      console.log("No messages in payload");
+      return res.status(200).send("ok");
+    }
+    
     console.log("messages arr:", body.entry[0].changes[0].value.messages);
     console.log("phone number id:", body.entry[0].changes[0].value.metadata.phone_number_id);
     
-    const from_number_id = body.entry[0].changes[0].value.metadata.phone_number_id; // Removed extra parenthesis
+    const from_number_id = body.entry[0].changes[0].value.metadata.phone_number_id;
     console.log("from:", body.entry[0].changes[0].value.messages[0].from);
     
     const from = body.entry[0].changes[0].value.messages[0].from;
+    
+    // Check if text field exists (it might be a different message type)
+    if (!body.entry[0].changes[0].value.messages[0].text) {
+      console.log("Not a text message, might be an image or other type");
+      return res.status(200).send("ok");
+    }
+    
     console.log("msg text:", body.entry[0].changes[0].value.messages[0].text);
     console.log("msg body:", body.entry[0].changes[0].value.messages[0].text.body);
 
+    // Add your token here - currently it's empty
+    const token = 'EAAPhjBDnUQwBOwpyxVZCxOcKvLOOAyItHnaVmrtgiVKybAXXGT7Ajf3Vjzxhk7mmQ8fJN2C5qhbr5Ww0ZCVMCBqHQuS19z2cZCNGVLS0yFZC0PfrlZCMFDEXmoqZCM4oq3CWUliK0gYFmbi6jguJt5UXnNFxTEritiIgyaNbuod4GzL1wx5IaHEM29IukcIZCeiY0EZCqbdYYuMUKRSpxaKCxz15F37ARDMrin8ZD'
+    
     // Add await for the axios call and proper error handling
-   const response =  await axios({
+    const response = await axios({
       method: 'post',
       url: `https://graph.facebook.com/v22.0/${from_number_id}/messages`,
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer EAAPhjBDnUQwBOwpyxVZCxOcKvLOOAyItHnaVmrtgiVKybAXXGT7Ajf3Vjzxhk7mmQ8fJN2C5qhbr5Ww0ZCVMCBqHQuS19z2cZCNGVLS0yFZC0PfrlZCMFDEXmoqZCM4oq3CWUliK0gYFmbi6jguJt5UXnNFxTEritiIgyaNbuod4GzL1wx5IaHEM29IukcIZCeiY0EZCqbdYYuMUKRSpxaKCxz15F37ARDMrin8ZD' // Add your actual token here
+        'Authorization': `Bearer ${token}`
       },
       data: {
         messaging_product: 'whatsapp',
@@ -113,16 +130,20 @@ app.post('/webhook', async(req, res) => {
         type: 'text',
         text: {
           preview_url: true,
-          body: "As requested, here's the link to our latest product: https://www.meta.com/quest/quest-3/"
+          body: "Hello How Are You"
         }
       }
     });
 
-    console.log("response:" , response);
+    console.log("Response status:", response.status);
+    console.log("Response data:", response.data);
     
     res.status(200).send("ok");
   } catch(err) {
-    console.error("Error:", err);
+    console.error("Error:", err.message);
+    if (err.response) {
+      console.error("Error response data:", err.response.data);
+    }
     res.status(200).send("ok"); // Still return 200 to WhatsApp even if there's an error
   }
 });
