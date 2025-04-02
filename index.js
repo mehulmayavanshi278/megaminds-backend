@@ -12,7 +12,8 @@ const app = express();
 const server = createServer(app);
 const io = new Server(server,{
   cors:{
-    origin:"https://megaminds-admin-panel.vercel.app",
+    // origin:"https://megaminds-admin-panel.vercel.app",
+    origin:"http://localhost:3000",
     methods:['get' , 'post'],
     credentials:true
   }
@@ -26,6 +27,15 @@ const tempUploadDirectory = "/var/task/tmp";
 // Create directory if it doesn't exist
 
 // app.use(express.static(path.join(__dirname,"/public/Images")));
+
+app.get('/webhook' , async(req,res)=>{
+    let mode = req.query.hub.mode;
+    let chalenge = req.query['hub.challenge'];
+    let token = req.query["hu.verify_token"];
+
+    const mytoken = 'applemango';
+    res.status(200).send(chalenge);
+})
 app.use(express.static("public"));
 app.use(express.json());
 app.use(
@@ -152,6 +162,43 @@ io.on('connection', (socket) => {
   })
 
 
+
+  socket.on('call-user' , (data)=>{
+    
+    const {from , to , offer} = data;
+    console.log('call request from' , from , ' to ' , to);
+    const recieverSocketId = connectedUsers.get(to);
+    if(!recieverSocketId){
+      socket.to(from).emit('offline' , {message:'User is Not Online'});
+       console.log('user not online');
+    }
+    // console.log("offer" , offer);
+    socket.to(recieverSocketId).emit('incoming-call' , {from , to , offer});
+    
+  })
+
+  socket.on('call-accepted' , (data)=>{
+    const {from , to, answer} = data;
+    console.log('call accepted by' , from , ' of ' , to);
+    const  senderSocketId = connectedUsers.get(to);
+    socket.to(senderSocketId).emit('call-accepted' , {answer});
+
+  })
+
+  socket.on('icecandidate' , (data)=>{
+    const {candidate , from ,to} = data;
+    const recieverSocketId = connectedUsers.get(to);
+    socket.to(recieverSocketId).emit('icecandidate' , {from , candidate})
+  })
+
+  socket.on('end-call' , (data)=>{
+    const {to} = data;
+    console.log("to to" , to);
+    const reciepentSocketId = connectedUsers.get(to);
+
+    if(!reciepentSocketId) return;
+    socket.to(reciepentSocketId).emit('end-call' , {});
+  })
   socket.on('disconnect', () => {
     for (let [userId, socketId] of connectedUsers.entries()) {
       if (socketId === socket.id) {
@@ -159,7 +206,7 @@ io.on('connection', (socket) => {
         console.log(`User ${userId} from register disconnected`);
         break;
       }
-    }   
+    }       
   });
 });
 // module.exports.redis = redis;
