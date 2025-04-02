@@ -32,7 +32,7 @@ const tempUploadDirectory = "/var/task/tmp";
 
 app.get('/webhook' , async(req,res)=>{
   try{
-    console.log("webookk triggered");
+    console.log("get webookk triggered");
     let mode = req.query['hub.mode'];
     let chalenge = req.query['hub.challenge'];
     let token = req.query["hu.verify_token"];
@@ -47,6 +47,7 @@ app.get('/webhook' , async(req,res)=>{
 
 app.post('/webhook' , async(req, res)=>{
   try{
+    console.log("post webhook triggered");
     const body = req.body;
     console.log("body:" , body);
     res.status(200).send("ok");
