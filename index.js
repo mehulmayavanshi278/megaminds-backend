@@ -73,20 +73,55 @@ app.get('/webhook' , async(req,res)=>{
 
 })
 
-app.post('/webhook' , async(req, res)=>{
-  try{
+app.post('/webhook', async(req, res) => {
+  try {
     console.log("post webhook triggered");
     const body = req.body;
-    console.log("body:" , body);
-    console.log("messages arr:" , body.entry[0].changes[0].value.messages);
-    console.log("from:" , body.entry[0].changes[0].value.messages[0].from);
-    console.log("msg text:" , body.entry[0].changes[0].value.messages[0].text);
-    console.log("msg body:" , body.entry[0].changes[0].value.messages[0].text.body);
+    console.log("body:", body);
+    
+    // Add a check to make sure body has the expected structure
+    if (!body || !body.entry || !body.entry[0] || !body.entry[0].changes || 
+        !body.entry[0].changes[0] || !body.entry[0].changes[0].value) {
+      console.log("Received invalid webhook payload");
+      return res.status(200).send("ok"); // WhatsApp expects 200 OK even for invalid payloads
+    }
+    
+    console.log("messages arr:", body.entry[0].changes[0].value.messages);
+    console.log("phone number id:", body.entry[0].changes[0].value.metadata.phone_number_id);
+    
+    const from_number_id = body.entry[0].changes[0].value.metadata.phone_number_id; // Removed extra parenthesis
+    console.log("from:", body.entry[0].changes[0].value.messages[0].from);
+    
+    const from = body.entry[0].changes[0].value.messages[0].from;
+    console.log("msg text:", body.entry[0].changes[0].value.messages[0].text);
+    console.log("msg body:", body.entry[0].changes[0].value.messages[0].text.body);
+
+    // Add await for the axios call and proper error handling
+    await axios({
+      method: 'post',
+      url: `https://graph.facebook.com/v22.0/${from_number_id}/messages`,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer EAAPhjBDnUQwBOwpyxVZCxOcKvLOOAyItHnaVmrtgiVKybAXXGT7Ajf3Vjzxhk7mmQ8fJN2C5qhbr5Ww0ZCVMCBqHQuS19z2cZCNGVLS0yFZC0PfrlZCMFDEXmoqZCM4oq3CWUliK0gYFmbi6jguJt5UXnNFxTEritiIgyaNbuod4GzL1wx5IaHEM29IukcIZCeiY0EZCqbdYYuMUKRSpxaKCxz15F37ARDMrin8ZD' // Add your actual token here
+      },
+      data: {
+        messaging_product: 'whatsapp',
+        recipient_type: 'individual',
+        to: from,
+        type: 'text',
+        text: {
+          preview_url: true,
+          body: "As requested, here's the link to our latest product: https://www.meta.com/quest/quest-3/"
+        }
+      }
+    });
+    
     res.status(200).send("ok");
-  }catch(err){
-    console.log(err);
+  } catch(err) {
+    console.error("Error:", err);
+    res.status(200).send("ok"); // Still return 200 to WhatsApp even if there's an error
   }
-})
+});
 
 require("./startup/index.startup")(app , server);
 // const Redis = require("ioredis");
