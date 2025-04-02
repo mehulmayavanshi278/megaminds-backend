@@ -99,7 +99,7 @@ app.post('/webhook', async(req, res) => {
     console.log("msg body:", body.entry[0].changes[0].value.messages[0].text.body);
 
     // Add await for the axios call and proper error handling
-   const res =  await axios({
+   const response =  await axios({
       method: 'post',
       url: `https://graph.facebook.com/v22.0/${from_number_id}/messages`,
       headers: {
@@ -118,7 +118,7 @@ app.post('/webhook', async(req, res) => {
       }
     });
 
-    console.log("response:" , res);
+    console.log("response:" , response);
     
     res.status(200).send("ok");
   } catch(err) {
