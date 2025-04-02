@@ -104,7 +104,7 @@ app.post('/webhook', async(req, res) => {
       url: `https://graph.facebook.com/v22.0/${from_number_id}/messages`,
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer EAAPhjBDnUQwBOwpyxVZCxOcKvLOOAyItHnaVmrtgiVKybAXXGT7Ajf3Vjzxhk7mmQ8fJN2C5qhbr5Ww0ZCVMCBqHQuS19z2cZCNGVLS0yFZC0PfrlZCMFDEXmoqZCM4oq3CWUliK0gYFmbi6jguJt5UXnNFxTEritiIgyaNbuod4GzL1wx5IaHEM29IukcIZCeiY0EZCqbdYYuMUKRSpxaKCxz15F37ARDMrin8ZD' // Add your actual token here
+        'Authorization': 'Bearer EAAPhjBDnUQwBOy7fpid4DpbJVkxbou94O4HXkNy52jWDrbpMdQzO9wZCRAT6SkZCnCbzLH05HBHdZBwfRGvzZCYhPo53TaXtfp0qkzE4sz8xsdS5RBqnaYquzkRKRrdF7dwyMZCSz0L3ZAsQp0biNMUGO9ZCaFPSUOIUTMJ1WRYxDZBJlZCZAWJSNHVoSZBb9p3666Bu89ovEHWp0NGZCqS9H1ZAcvFP8Bst4CAKcBwcZD' // Add your actual token here
       },
       data: {
         messaging_product: 'whatsapp',
@@ -112,7 +112,7 @@ app.post('/webhook', async(req, res) => {
         to: from,
         type: 'text',
         text: {
-          preview_url: true,
+          // preview_url: true,
           body: "Hello, How Are You!"
         }
       }
